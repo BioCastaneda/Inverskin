@@ -8,3 +8,7 @@ Este repositorio contiene toda la información relacionada al curso de bioestad�
 
 R puede ser descargado desde [CRAN](https://cran.r-project.org/) dependiendo del sistema operativo que utilices.
 Además recomendamos la utilización de [RStudio](https://www.rstudio.com/products/rstudio/download/) para utilizar una interfase más amigable respecto a la versión base de R.
+
+---
+# Contenidos prácticos del curso
+1. [Introducción a R](https://github.com/lecastaneda/Bioestadistica/blob/main/Intro_R.R)
