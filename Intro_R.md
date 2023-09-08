@@ -1,8 +1,10 @@
 # Introducción a R 
 
-##En esta sección haremos una breve introducción al programa R. Aprenderemos a hacer operaciones matemáticas básicas, crear vectores, matrices, etc.
+En esta sección haremos una breve introducción al programa R. Aprenderemos a hacer operaciones matemáticas básicas, crear vectores, matrices, etc.
 
-## Borrar todos los objetos previamente ingresados en la sesión de R
+---
+
+Borrar todos los objetos previamente ingresados en la sesión de R
 rm(list=ls()) 
 
 ## TIPOS DE DATOS: los tipos básicos de datos en R son: character, numeric, integer, logical
