@@ -12,4 +12,5 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 ---
 # Contenidos prácticos del curso
 1. [Clase 1: Diseño experimental y estadística](https://github.com/BioCastaneda/Inversink/blob/main/archivos/Clase1.pdf)
-1. [Introducción a R](Intro_R.R)
+1a. [Introducción a R](Intro_R.R)
+1b. [Introducción a R](Intro_R.md)
