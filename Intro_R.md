@@ -23,7 +23,7 @@ character: siempre se denotan entre comillas " ":
 2.5
 19657.458
 
-# integer: (numeros enteros. no contienen decimales, se indican con una L luego del numero)
+# integer: (nuúmeros enteros. no contienen decimales, se indican con una L luego del número)
 10L
 230L
 10.5L #(indica warning, transforma el valor a numeric por tener decimal)
