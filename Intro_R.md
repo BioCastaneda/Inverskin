@@ -4,12 +4,12 @@ En esta sección haremos una breve introducción al programa R. Aprenderemos a h
 
 ---
 
-Borrar todos los objetos previamente ingresados en la sesión de R
+### Borrar todos los objetos previamente ingresados en la sesión de R
 ```
 rm(list=ls()) 
 ```
 
-## TIPOS DE DATOS: los tipos básicos de datos en R son: character, numeric, integer, logical
+### TIPOS DE DATOS: los tipos básicos de datos en R son: character, numeric, integer, logical
 ```
 character: siempre se denotan entre comillas " ":
 "a"
@@ -37,21 +37,22 @@ F
 10>5
 ```
 
-## La función str() muestra el tipo del dato u objeto
+### La función str() muestra el tipo del dato u objeto
+```
 class("gato")
 class(2)
 class(2.5)
 class(10L)
 class(10.5L)
 class(T)
+```
 
-## TIPOS DE ESTRUCTURAS DE DATOS: los datos basicos vistos anteriormente pueden estar contenidos
-## en estructuras más complejas
-## Tipos: vectors, list, matrix, data frame and factors
-## Estructuras que solo pueden contener un tipo de dato: vector y matrix
-## Estructuras que pueden contener múltiples tipos de datos: list, data frame
+### TIPOS DE ESTRUCTURAS DE DATOS: los datos basicos vistos anteriormente pueden estar contenidos en estructuras más complejas
+Tipos: vectors, list, matrix, data frame and factors
+Estructuras que solo pueden contener un tipo de dato: vector y matrix
+Estructuras que pueden contener múltiples tipos de datos: list, data frame
 
-# VECTOR: colección de elementos de un mismo tipo, para crearlos se usa la funcion concatenar: c()
+### VECTOR: colección de elementos de un mismo tipo, para crearlos se usa la funcion concatenar: c()
 c(1,5,10)
 c("Gato", "Perro")
 c(TRUE, FALSE, TRUE)
