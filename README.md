@@ -11,4 +11,4 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 
 ---
 # Contenidos prácticos del curso
-1. [Introducción a R](Clase_1.md)
+1. [Introducción a R](Intro_R.R)
