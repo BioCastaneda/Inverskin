@@ -11,4 +11,4 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 
 ---
 # Contenidos prácticos del curso
-1. [Introducción a R](https://github.com/lecastaneda/Bioestadistica/blob/main/Intro_R.R)
+1. [Introducción a R](Clase_1.md)
