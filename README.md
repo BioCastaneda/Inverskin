@@ -11,4 +11,5 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 
 ---
 # Contenidos prácticos del curso
+1. [Clase 1: Diseño experimental y estadística]
 1. [Introducción a R](Intro_R.R)
