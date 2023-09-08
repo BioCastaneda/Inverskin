@@ -5,18 +5,20 @@ En esta sección haremos una breve introducción al programa R. Aprenderemos a h
 ---
 
 Borrar todos los objetos previamente ingresados en la sesión de R
+```
 rm(list=ls()) 
+```
 
 ## TIPOS DE DATOS: los tipos básicos de datos en R son: character, numeric, integer, logical
-
-#character: siempre se denotan entre comillas " ":
+```
+character: siempre se denotan entre comillas " ":
 "a"
 "Gato"
 "El gato botó el florero"
 "12"
 "#312"
 
-# numeric:
+#numeric:
 2
 2.5
 19657.458
@@ -33,6 +35,7 @@ T
 F
 10<5
 10>5
+```
 
 ## La función str() muestra el tipo del dato u objeto
 class("gato")
