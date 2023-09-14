@@ -6,9 +6,9 @@ En esta clase veremos análisis paramétricos y no paramétricos para comparar d
 
 ## Contenido
 
-1. Comparación de promedio contra un valor dado
-2. Comparación entre dos grupos pareados
-3. Comparación entre dos grupos no pareados
+1. [Comparación de promedio contra un valor dado](https://github.com/BioCastaneda/Inverskin/edit/main/Clase_2.md#1-comparaci%C3%B3n-de-promedio-contra-un-valor-dado)
+2. Comparación entre dos grupos no pareados
+3. Comparación entre dos grupos pareados
 
 ---
 
@@ -66,6 +66,14 @@ Si los datos no son normales, podemos aplicar la prueba paramétrica de Wilcox
 ```
 wilcox.test(fisura, mu=34.8)
 ```
+
+---
+
+## 2. Comparación entre dos grupos no pareados
+
+Para este ejercicio vamos a utilizar datos publicados del trabajo "High-Fat and Low-Carbohydrate Diets Are Associated with Allergic Rhinitis But Not Asthma or Atopic Dermatitis in Children"
+de los autores Kim y colaboradores publicados en PLoS One el 2016 (https://doi.org/10.1371/journal.pone.0150202).
+
 
 
 
