@@ -29,7 +29,6 @@ distancia canina de pacientes sin esa condición. Para esto se toman muestras de
 | 24,9 | 
 | 25,2 | 
 | 26,3 | 
-
 ```
 rm(list=ls()) # limpia el ambiente
 graphics.off() # Limpiar la lista de gráficos
@@ -75,6 +74,20 @@ Para este ejercicio vamos a utilizar datos publicados del trabajo "High-Fat and 
 de los autores Kim y colaboradores publicados en PLoS One el 2016 (https://doi.org/10.1371/journal.pone.0150202).
 
 ![PLOS](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/pone.0150202.t002.png)
+
+Los tamaños muestreales de este estudios son los siguientes:
+
+| Categoría | Rinitis alérgica | Asma | Dermatitis atópica |
+| :-------: | :---: | :---: |:---: |
+| No | 2369 | 2858 | 2569 | 
+| Si | 671 | 182 | 471 |
+
+Asumiendo que los datos son normales, vamos a reconstruir los datos tomando en cuenta los promedios, desviación estándar y tamaño muestreal
+```
+rinitis.si <- rnorm(
+
+
+
 
 
 
