@@ -83,8 +83,9 @@ Los tamaños muestreales de este estudios son los siguientes:
 | Si | 671 | 182 | 471 |
 
 Asumiendo que los datos son normales, vamos a reconstruir los datos tomando en cuenta los promedios, desviación estándar y tamaño muestreal
-```
-rinitis.si <- rnorm(
+
+https://peerj.com/articles/1889/
+
 
 
 
