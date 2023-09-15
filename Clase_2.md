@@ -143,7 +143,8 @@ fligner.test(carbohidratos ~ categorias, data=rinitis)
 
 Si los datos no cumples con estos supuestos paramétricos, debemos usar un análisis no paramétrico.
 ```
-wilcox.test(carbohidratos ~ categorias, data=rinitis, alternative="two.sided", paired=F)
+test1 <- wilcox.test(carbohidratos ~ categorias, data=rinitis, alternative="two.sided", paired=F)
+test1
 ```
 
 Vamos a hacer un gráfico de caja y bigote
@@ -198,7 +199,8 @@ plot1 + geom_line(data=tibble(x=c(1, 2), y=c(67, 67)),
 
 **IMPORTANTE**: apesar de que los datos no cumplen los supuestos paramétricos, vamos a hacer una prueba de t-student no pareada para efectos didácticos.
 ```
-t.test(carbohidratos ~ categorias, data=rinitis, alternative = "two.sided", paired=F, var.equal=T)
+test2 <- t.test(carbohidratos ~ categorias, data=rinitis, alternative = "two.sided", paired=F, var.equal=T)
+test2
 ```
 
 También podemos calcular el tamaño del efecto del tratamiento. Esto nos permite cuantificar la magnitud del efecto que tiene un tratamiento sobre una variable respuesta.
@@ -206,6 +208,25 @@ También podemos calcular el tamaño del efecto del tratamiento. Esto nos permit
 install.packages("rstatix")
 library(rstatix)
 rinitis  %>% cohens_d(carbohidratos ~ categorias, paired = F)
+```
+
+Podemos calcular el poder de la prueba estadística.
+```
+test1$estimate  # entrega los promedios de cada grupo usados en la prueba de t
+diff <- 64.89131-63.29767
+diff
+
+# Cargaremos el paquete pwr para hacer cálculos de poder (la probabilidad de rechazar H0 cuando es falsa)
+install.packages("pwr")
+library(pwr)
+pwr.t2n.test(n1 = 2369, n2 = 671, sig.level = 0.05, power = NULL, d = diff, alternative="two.sided")
+```
+
+También podemos calcular el tamaño mímino para alcanzar una potencia del 95%.
+```
+sample.size <- pwr.t.test(d=1.59, power=0.95, type="two.sample", alternative="two.sided")
+sample.size
+plot(sample.size, xlab="sample size per group")
 ```
 
 Ahora vamos a hacer un gráfico con barras de error
@@ -278,6 +299,7 @@ ggsave("Figura_1.tiff", units="in", width=12.2, height=3.79)
 ---
 
 ## 3. Comparación entre dos grupos pareados
+
 
 
 
