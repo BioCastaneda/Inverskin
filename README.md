@@ -15,6 +15,6 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 1. [Clase 1: Diseño experimental y estadística](https://github.com/BioCastaneda/Inversink/blob/main/archivos/Clase1.pdf)
 2. [Introducción a R](Intro_R.R)
 ### Clase 2
-1. [Clase 2: comparación de dos grupos)
+1. [Clase 2: comparación de dos grupos](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/Clase2.pdf)
 2. [Clase 2: R](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_2.md)
 
