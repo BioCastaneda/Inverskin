@@ -318,7 +318,24 @@ install.packages("readxl")
 library(readxl)
 data3 <- read_xlsx("tacrolimus.xlsx")  
 head(data3)
+
+str(data1)
+data1$tiempo <- as.factor(data1$tiempo)
 ```
+
+Estadísticas básicas
+```
+tabla2 <- group_by(data1, tiempo) %>%
+  summarise(muestras=n(),
+            media=mean(C0, na.rm=T),
+            mediana=median(C0, na.rm=T),
+            varianza=var(C0, na.rm=T),
+            DE=sd(C0, na.rm=T),
+            EE=DE/sqrt(muestras))
+tabla2
+```
+
+
 
 
 
