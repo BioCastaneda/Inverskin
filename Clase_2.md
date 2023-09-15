@@ -8,7 +8,7 @@ En esta clase veremos análisis paramétricos y no paramétricos para comparar d
 
 1. [Comparación de promedio contra un valor dado](https://github.com/BioCastaneda/Inverskin/edit/main/Clase_2.md#1-comparaci%C3%B3n-de-promedio-contra-un-valor-dado)
 2. [Comparación entre dos grupos no pareados](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_2.md#2-comparaci%C3%B3n-entre-dos-grupos-no-pareados)
-3. Comparación entre dos grupos pareados
+3. [Comparación entre dos grupos pareados](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_2.md#3-comparaci%C3%B3n-entre-dos-grupos-pareados)
 
 ---
 
