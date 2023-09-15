@@ -147,7 +147,7 @@ Si los datos no cumples con estos supuestos paramétricos, debemos usar un anál
 wilcox.test(carbohidratos ~ categorias, data=rinitis, alternative="two.sided", paired=F)
 ```
 
-A graficar!!
+Vamos a hacer un gráfico de caja y bigote
 ```
 ggboxplot(rinitis, x="categorias", y="carbohidratos", color="categorias")
 ggboxplot(rinitis, x="categorias", y="carbohidratos", color="categorias", add="jitter")
@@ -156,7 +156,117 @@ ggboxplot(rinitis, x="categorias", y="carbohidratos", color="categorias", add="j
           palette=c("orange","darkgreen"), legend="none")
 ```
 
+Ahora vamos a hacer un gráfico de violín
+```
+ggviolin(rinitis, x="categorias", y="carbohidratos", color="categorias", add="jitter",
+          ylab="Porcentaje de carbohidratos (%)", shape="categorias", 
+          palette=c("orange","darkgreen"), legend="none")
+```
 
+Podemos ir agregando elementos. Por ejemplo, la mediana de cada grupo.
+```
+ggviolin(rinitis, x="categorias", y="carbohidratos", color="categorias", add="jitter",
+         ylab="Porcentaje de carbohidratos (%)", shape="categorias", 
+         palette=c("orange","darkgreen"), legend="none")+
+  stat_summary(fun=median, show.legend=F, geom="crossbar", position=position_dodge(width=0.5), width=0.5)
+```
+
+Vamos a volver al gráfico de caja y bigote para agregarle manualmente datos del análisis estadístico
+```
+#
+# Vamos a crear el objeto "plot1" para después llamarlo cuando queramos
+plot1 <- ggboxplot(rinitis, x="categorias", y="carbohidratos", color="categorias", add="jitter",
+          ylab="Porcentaje de carbohidratos (%)", shape="categorias", 
+          palette=c("orange","darkgreen"), legend="none")
+
+# Agregamos una línea y asteríscos
+plot1 + geom_line(data=tibble(x=c(1, 2), y=c(67, 67)),
+                   aes(x=x, y=y),
+                   inherit.aes=FALSE)+
+  geom_text(data=tibble(x=1.5, y=67.3),
+            aes(x=x, y=y, label="****"), size=4,
+            inherit.aes=FALSE)
+
+# Otra opción es agregar el valor de probabilidad exacto
+plot1 + geom_line(data=tibble(x=c(1, 2), y=c(67, 67)),
+                  aes(x=x, y=y),
+                  inherit.aes=FALSE)+
+  geom_text(data=tibble(x=1.5, y=67.3),
+            aes(x=x, y=y, label="P < 2.2 e-16"), size=4,
+            inherit.aes=FALSE)
+```
+
+IMPORTANTE: apesar de que los datos no cumplen los supuestos paramétricos, vamos a hacer una prueba de t-student no pareada para efectos didácticos.
+```
+t.test(carbohidratos ~ categorias, data=rinitis, alternative = "two.sided", paired=F, var.equal=T)
+```
+
+Ahora vamos a hacer un gráfico con barras de error
+```
+# Primero calculamos los estadígrafos necesarios para graficar
+library(dplyr)
+data.summary <- rinitis %>%
+  group_by(categorias) %>%
+  summarise(
+    mean = mean(carbohidratos, na.rm = TRUE),
+    sd = sd(carbohidratos, na.rm = TRUE),
+    len = mean(carbohidratos),
+    se = sd/sqrt(len)
+  )
+data.summary
+
+# Luego procedemos a graficar
+plot2 <- ggplot(data.summary, aes(x=categorias, y=mean, group=categorias, color=categorias)) + 
+  geom_point(position=position_dodge(0.1), size=3)+
+  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=0.1,
+                position=position_dodge(0.1), size=1)+
+  labs(x="Condición", y = "Porcentaje de carbohidratos (%)")+
+  ggtitle("Rinitis alérgica")+
+  scale_y_continuous(limit = c(61, 67))+
+  theme_classic()+
+  theme(axis.text = element_text(size=11, color="black"),
+        axis.title = element_text(size=13),
+        plot.title = element_text(size=15, face="bold", hjust=0.5),
+        legend.position = "none")+
+  geom_line(data=tibble(x=c(1, 2), y=c(66.5, 66.5)),
+                  aes(x=x, y=y),
+                  inherit.aes=FALSE)+
+  geom_text(data=tibble(x=1.5, y=66.7),
+            aes(x=x, y=y, label="P < 2.2 e-16"), size=4,
+            inherit.aes=FALSE)
+plot2
+```
+
+Probemos otra opción
+```
+plot3 <- rinitis %>%
+  ggplot(aes(y=carbohidratos, x=categorias, fill=categorias)) +
+  geom_jitter(show.legend=F, shape=21, color="black", size=4, 
+              position=position_jitterdodge(jitter.width=0.4, dodge.width=0.9)) +
+  stat_summary(fun=mean, show.legend=F, geom="crossbar", position=position_dodge(width=0.2), width=0.3) + 
+  labs(x="Condición", y="Porcentaje de carbohidratos (%)")+
+  scale_y_continuous(limit = c(61, 67))+
+  ggtitle("Rinitis alérgica")+
+  theme_classic()+
+  theme(axis.text = element_text(size=10, color="black"),
+        axis.title = element_text(size=13),
+        plot.title = element_text(size=15, face="bold", hjust=0.5))+
+  geom_line(data=tibble(x=c(1, 2), y=c(66.5, 66.5)),
+                  aes(x=x, y=y),
+                  inherit.aes=FALSE)+
+  geom_text(data=tibble(x=1.5, y=66.7),
+            aes(x=x, y=y, label="P < 2.2 e-16"), size=4,
+            inherit.aes=FALSE)
+plot3
+```
+
+Ahora grafiquemos todo junto para generar una figura lista para nuestro manuscrito, tesis, presentación o póster.
+```
+plot4 <- ggarrange(plot2, plot3, labels=c("A","B"), ncol=2, nrow=1)
+plot4
+ggsave("Figura_1.pdf")
+ggsave("Figura_1.tiff", units="in", width=12.2, height=3.79)
+```
 
 
 
