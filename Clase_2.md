@@ -300,6 +300,25 @@ ggsave("Figura_1.tiff", units="in", width=12.2, height=3.79)
 
 ## 3. Comparación entre dos grupos pareados
 
+En esta sección vamos a comparar niveles plasmáticos de un inmunosupresor tomados en un grupo de pacientes después de 1 y 12 horas de su administración.
+Los datos  que vamos a utilizar están guardados en diferentes tipos de archivos: [TXT](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tacrolimus.txt), [CSV](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tacrolimus.csv), y [EXCEL](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tacrolimus.xlsx). Descargue los tres archivos.
+
+Carguemos los archivos
+```
+# TXT
+data1 <- read.table("tacrolimus.txt", header=T)
+head(data1)
+
+# CSV
+data2 <- read.csv("tacrolimus.csv", header=T, sep=";")
+head(data2)
+
+# EXCEL
+install.packages("readxl")
+library(readxl)
+data3 <- read_xlsx("tacrolimus.xlsx")  
+head(data3)
+```
 
 
 
