@@ -131,7 +131,6 @@ shapiro.test(log10(rinitis$carbohidratos))
 ggqqplot(sqrt(rinitis$carbohidratos), title="Histograma datos originales", col="blue")
 shapiro.test(sqrt(rinitis$carbohidratos))
 # recíproco
-# logaritmo de 10
 ggqqplot(1/(rinitis$carbohidratos), title="Histograma datos originales", col="blue")
 shapiro.test(1/(rinitis$carbohidratos))
 ```
