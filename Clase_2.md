@@ -70,8 +70,7 @@ wilcox.test(fisura, mu=34.8)
 
 ## 2. Comparación entre dos grupos no pareados
 
-Para este ejercicio vamos a utilizar datos publicados del trabajo "High-Fat and Low-Carbohydrate Diets Are Associated with Allergic Rhinitis But Not Asthma or Atopic Dermatitis in Children"
-de los autores Kim y colaboradores publicados en PLoS One el 2016 (https://doi.org/10.1371/journal.pone.0150202).
+Para este ejercicio vamos a utilizar datos publicados del trabajo "High-Fat and Low-Carbohydrate Diets Are Associated with Allergic Rhinitis But Not Asthma or Atopic Dermatitis in Children" de los autores Kim y colaboradores publicados en PLoS One el 2016 (https://doi.org/10.1371/journal.pone.0150202). El diseño de este estudio representa un muestreo no pareado, ya que las muestras de un grupo son completamente independientes a la del otro grupo.
 
 ![PLOS](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/pone.0150202.t002.png)
 
@@ -196,9 +195,17 @@ plot1 + geom_line(data=tibble(x=c(1, 2), y=c(67, 67)),
             inherit.aes=FALSE)
 ```
 
-IMPORTANTE: apesar de que los datos no cumplen los supuestos paramétricos, vamos a hacer una prueba de t-student no pareada para efectos didácticos.
+
+**IMPORTANTE**: apesar de que los datos no cumplen los supuestos paramétricos, vamos a hacer una prueba de t-student no pareada para efectos didácticos.
 ```
 t.test(carbohidratos ~ categorias, data=rinitis, alternative = "two.sided", paired=F, var.equal=T)
+```
+
+También podemos calcular el tamaño del efecto del tratamiento. Esto nos permite cuantificar la magnitud del efecto que tiene un tratamiento sobre una variable respuesta.
+```
+install.packages("rstatix")
+library(rstatix)
+rinitis  %>% cohens_d(carbohidratos ~ categorias, paired = F)
 ```
 
 Ahora vamos a hacer un gráfico con barras de error
@@ -268,10 +275,12 @@ ggsave("Figura_1.pdf")
 ggsave("Figura_1.tiff", units="in", width=12.2, height=3.79)
 ```
 
+---
+
+## 3. Comparación entre dos grupos pareados
 
 
 
-https://peerj.com/articles/1889/
 
 
 
