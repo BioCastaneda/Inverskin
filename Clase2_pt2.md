@@ -17,7 +17,7 @@ rinitis  %>% cohens_d(carbohidratos ~ categorias, paired = F)
 
 Podemos calcular el poder de la prueba estadística.
 ```
-test1$estimate  # entrega los promedios de cada grupo usados en la prueba de t
+test2$estimate  # entrega los promedios de cada grupo usados en la prueba de t
 diff <- 64.89131-63.29767
 diff
 
@@ -125,20 +125,119 @@ data3 <- read_xlsx("tacrolimus.xlsx")
 head(data3)
 
 str(data1)
-data1$tiempo <- as.factor(data1$tiempo)
+data1$tiempo.factor <- as.factor(data1$tiempo)
+str(data1)
 ```
 
 Estadísticas básicas
 ```
-tabla2 <- group_by(data1, tiempo) %>%
+library(dplyr)
+tabla2 <- group_by(data1, tiempo.factor) %>%
   summarise(muestras=n(),
-            media=mean(C0, na.rm=T),
-            mediana=median(C0, na.rm=T),
-            varianza=var(C0, na.rm=T),
-            DE=sd(C0, na.rm=T),
+            media=mean(C1, na.rm=T),
+            mediana=median(C1, na.rm=T),
+            varianza=var(C1, na.rm=T),
+            DE=sd(C1, na.rm=T),
             EE=DE/sqrt(muestras))
 tabla2
 ```
+
+Pruebas de normalidad
+```
+## Visualizar el qqplot
+library(ggpubr)
+ggqqplot(data1$C1)
+
+## Shapiro-Wilk funcionan bien para tamaños muestreales mayores a 30
+shapiro.test(data1$C1)
+
+# Los datos no son normales y vamos a transformar a logaritmo de 10,
+# pero antes revisamos el rango de valores. Si hay valores menores a 1,
+# sumar una constante para evitar datos indefinidos
+range(data1$C1)
+shapiro.test(log10(data1$C1))
+ggqqplot(log10(data1$C1))
+```
+
+Pruebas de homocedasticidad
+```
+## Prueba de Barlett
+bartlett.test(C1 ~ tiempo.factor, data=data1)
+## Prueba de Levene
+library(car)
+leveneTest(C1 ~ tiempo.factor, data=data1)
+## Prueba de Filgner-Killen
+fligner.test(C1 ~ tiempo.factor, data=data1)
+```
+
+Todas las pruebas indican que las varianzas no son homogéneas entre ambos grupos, así que usaremos una transformación.
+```
+## Prueba de Barlett
+bartlett.test(log10(C1) ~ tiempo.factor, data=data1)
+## Prueba de Levene
+library(car)
+leveneTest(log10(C1) ~ tiempo.factor, data=data1)
+## Prueba de Filgner-Killen
+fligner.test(log10(C1) ~ tiempo.factor, data=data1)
+```
+
+Ahora realizaremos una prueba de t para muestras pareadas.
+```
+# Primero con el paquete básico
+test3 <- t.test(log10(TAC) ~ tiempo, data=data1.nuevo, paired=TRUE)  # el argumento "paired" establece si las muestras son pareadas o no
+test3
+
+# Ahora utilizado el paquete rstatix.
+library(rstatix)
+data1.nuevo$log10.TAC <- log10(data1.nuevo$TAC)  # debemos crear una nueva variable para rstatix funcione
+head(data1.nuevo)
+
+# El paquete rstatix tiene la ventaja de que entrega información del análisis de manera tabulada que después podemos usar.
+test4 <- data1.nuevo %>%
+  t_test(log10.TAC ~ tiempo, paired=TRUE) %>%
+  add_significance()
+test4
+```
+
+Como podemos ver existen diferencias significativas en los niveles de TAC entre las muestras tomadas después de 1 y 12 horas de adminstrado el fármaco.
+Sin embargo, el valor de P (i.e., la probabilidad de que la H0 sea verdadera) no nos informa sobre la magnitud del efecto. Para esto vamos a calcular
+el tamaño del efecto de Cohens
+```
+data1.nuevo  %>% cohens_d(log10.TAC ~ tiempo, paired = TRUE)
+# El tamaño del efecto es grande
+```
+
+Ahora vamos a graficar.
+```
+set.seed(0)    # Setear un valor semilla no permitira evitar la aleatoriedad de los valores en los gráficos
+plot4 <- data1.nuevo %>%                                                              # set de datos
+  ggplot(aes(y=TAC, x=tiempo, fill=tiempo)) +                                         # variables x e y. Además indica que el color sea distinto entre los grupos
+  geom_jitter(show.legend=F, shape=21, color="black", size=4,                         # forma, color y tamaño de los símbolos
+              position=position_jitterdodge(jitter.width=0.3, dodge.width=0.5)) +     # disperción de los símbolos
+  stat_summary(fun=mean, show.legend=F, geom="crossbar",                              # agrega una línea horizontal con el valor del promedio
+               position=position_dodge(width=0.2), width=0.5) +                       # grosor y ancho de la línea
+  labs(x="Tiempo de muestra (h)", y="Niveles plasmáticos de TAC (ng/ml)")+            # títulos de los ejes
+  scale_x_discrete(breaks=c("C1","C12"),  
+                   labels=c(glue("1"),
+                            glue("12")))+                                             # cambiar los valores del eje x
+  theme_classic()+                                                                    # formato del fondo del gráfico
+  theme(axis.text = element_text(size=10, color="black"),                             # formato de las unidades de los ejes
+        axis.title = element_text(size=13))                                           # formato del título de los ejes
+plot4axis.title = element_text(size=13))
+plot4
+```
+
+Podemos agregar el resultado de la prueba estadística al gráfico
+```
+stat.test <- test4 %>% mutate(y.position = c(25))                                     # definimos la posición del resultado en el eje y
+plot4 + stat_pvalue_manual(stat.test, label = "P < {p}", tip.length = 0.01, ,         # definimos dónde la información
+                           inherit.aes=FALSE)
+ggsave("Figura_2.pdf")                                                                # guardamos en formato pdf
+```
+
+
+
+
 
 
 
