@@ -101,7 +101,7 @@ AB %>% t_test(log10.tiempo ~ Antibiotico) %>% adjust_pvalue(method="bonferroni")
 **5. Grafiquemos!!**
 
 ```
-plot9 <- AB %>%
+plot1 <- AB %>%
   ggplot(aes(y=Tiempo.h, x=Antibiotico, fill=Antibiotico)) +
   geom_jitter(show.legend=F, shape=21, color="black", size=4, 
               position=position_jitterdodge(jitter.width=0.3, dodge.width=0.8)) +
@@ -110,7 +110,7 @@ plot9 <- AB %>%
   theme_classic()+
   theme(axis.text = element_text(size=10, color="black"),
         axis.title = element_text(size=13))
-plot9
+plot1
 ```
 
 Agreguemos los valores de probabilidad y significancia a este gráfico
@@ -119,15 +119,15 @@ Agreguemos los valores de probabilidad y significancia a este gráfico
 stat.test <- tukey.aov %>% mutate(y.position = c(100,110,90))
 #
 # Gráfico con los valores de probabilidad
-plot9.1 <- plot9 + stat_pvalue_manual(stat.test, label = "P < {p.adj}", tip.length = 0.01,
+plot1.1 <- plot1 + stat_pvalue_manual(stat.test, label = "P < {p.adj}", tip.length = 0.01,
                            inherit.aes=FALSE)
 #
 # Gráfico con los signos de significancia
-plot9.2 <- plot9 + stat_pvalue_manual(stat.test, label = "{p.adj.signif}", tip.length = 0.01,
+plot1.2 <- plot1 + stat_pvalue_manual(stat.test, label = "{p.adj.signif}", tip.length = 0.01,
                                       inherit.aes=FALSE)
 #
 # Colomanos ambos gráficos en una misma figura y guardamos en formato PDF:
-ggarrange(plot9.1, plot9.2, labels=c("A","B"), ncol=2, nrow=1)
+ggarrange(plot1.1, plot1.2, labels=c("A","B"), ncol=2, nrow=1)
 ggsave("Figure_2.pdf", width=10, height = 4)
 ```
 
@@ -154,9 +154,7 @@ Este set datos corresponde a las notas obtenidas durante cuatro años consecutiv
 ```
 ## Cargar los datos
 data2 <- read.table("Notas_pregrado.txt", header=T)
-data2 <- na.omit(data2)
 head(data2)
-View(data2)
 str(data2)
 #
 ## Asignar a la columna "year" (año) como factor
@@ -164,21 +162,9 @@ data2$year <- as.factor(data2$year)
 str(data2)
 ```
 
-Realizar un gráfico de caja-bigotes para ver de forma general los datos
+Estadística descriptiva
 ```
-library(ggpubr)
-ggboxplot(data2, x="year", y="score", color="year")
-#
-## Se pueden observar outliers en algunos años. Estos tienen valores menores a 3, ¿quienes son?
-which(data2$score<3)
-#
-## Procedemos a eliminarlos
-data2a <- data2[-c(277,540),]
-```
-
-Creamos una tabla que nos entregue el tamaño muestreal, la media, la desviación estándar (DE), el error estándar (EE), y los valores míminos y máximos para cada uno de los años
-```
-tabla2 <- group_by(data2a, year) %>%
+tabla2 <- group_by(data2, year) %>%
   summarise(muestras=n(),
             media=mean(score, na.rm=T),
             DE=sd(score, na.rm=T),
@@ -188,55 +174,35 @@ tabla2 <- group_by(data2a, year) %>%
 tabla2
 ```
 
-Probamos la normalidad para los datos con y sin outliers. Además probamos la homocedasticidad.
+Probamos los supuestos paramétricos
 ```
 ## Normalidad
 shapiro.test(data2$score)
-plot10 <- gghistogram(data2$score, bins=10, title="Histograma datos con outliers", fill="blue", add="mean")
-plot10
-plot11 <- ggqqplot(data2$score, col="blue", main="QQplot datos con outliers")
-plot11
-#
-shapiro.test(data2a$score)
-plot12 <- gghistogram(data2a$score, bins=10, title="Histograma datos sin outlier", fill="red", add="mean")
-plot12
-plot13 <- ggqqplot(data2a$score, col="red", main="Histograma datos sin outlier")
-plot13
-#
-ggarrange(plot10, plot11, plot12, plot13, labels=c("A","B","C","D"), ncol=2, nrow=2)
+ggqqplot(data2$score, col="blue")
 #
 ## Homocedasticidad
-fligner.test(score ~ year, data=data2a)
+fligner.test(score ~ year, data=data2)
 ```
 
 Claramente los datos no se adjustan a una distribución normal por lo que debemos utilizar un análisis no paramétrico, a pesar que el supuesto de homocedasticidad si se cumple.
 ```
-kt <- kruskal.test(score~year, data=data2a)
-```
-Vamos a agregar una función con la cual si la prueba de Kruskal-Walis resulta significativa (p<0.05), automáticamente se prodecerá a realizar una prueba por parejas corregida por el método de la tasa de descubrimiento falsa (FDR)
-```
-if(kt$p.value < 0.05){
-  pt.fdr <- pairwise.wilcox.test(data2a$score, g=data2a$year,
-                             p.adjust.method="fdr")
-}
-kt
-pt.fdr
+kruskal.test(score~year, data=data2)
 ```
 
 Dado que los datos no son normales, la mejor opción de graficarlos es con un gráfico de caja-bigote.
 ```
-plot14 <- ggboxplot(data2a, x="year", y="score", fill="year", 
+plot2 <- ggboxplot(data2, x="year", y="score", fill="year", 
                   xlab="Año", ylab="Notas finales",
                   add="jitter", ylim=c(3.8,7.6), legend="none")
-plot14 
+plot2 
 ```
 
 Ahora incluiremos los resultados de las comparaciones múltiples en el gráfico
 ```
-post.fdr <- data2a %>% wilcox_test(score ~ year) %>% adjust_pvalue(method="fdr")
+post.fdr <- data2 %>% wilcox_test(score ~ year) %>% adjust_pvalue(method="fdr")
 post.fdr
 
-plot14 + stat_pvalue_manual(post.fdr,label="p.adj.signif",tip.length = 0.02, 
+plot2 + stat_pvalue_manual(post.fdr,label="p.adj.signif",tip.length = 0.02, 
                             y.position=c(6.7,7.5,7.7,7,7.2,6.8))
 ```
 
