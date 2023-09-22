@@ -191,19 +191,26 @@ kruskal.test(score~year, data=data2)
 
 Dado que los datos no son normales, la mejor opción de graficarlos es con un gráfico de caja-bigote.
 ```
-plot2 <- ggboxplot(data2, x="year", y="score", fill="year", 
-                  xlab="Año", ylab="Notas finales",
-                  add="jitter", ylim=c(3.8,7.6), legend="none")
-plot2 
+set.seed(0)
+plot2 <- data2 %>%
+  ggplot(aes(y=score, x=year, fill=year)) +
+  geom_boxplot(show.legend=F, outlier.shape = NA) +
+  geom_point(show.legend=F, shape=21, color="black", size=3, 
+              position=position_jitterdodge(jitter.width=0.8, dodge.width=0.8),
+             aes(color=year)) +
+  labs(x="Año", y="Nota final")+
+  theme_classic()+
+  theme(axis.text = element_text(size=10, color="black"),
+        axis.title = element_text(size=13))
+plot2
 ```
 
 Ahora incluiremos los resultados de las comparaciones múltiples en el gráfico
 ```
 post.fdr <- data2 %>% wilcox_test(score ~ year) %>% adjust_pvalue(method="fdr")
 post.fdr
-
 plot2 + stat_pvalue_manual(post.fdr,label="p.adj.signif",tip.length = 0.02, 
-                            y.position=c(6.7,7.5,7.7,7,7.2,6.8))
+                           y.position=c(7,8,7.5), inherit.aes=FALSE)  axis.title = element_text(size=13))
 ```
 
 ---
