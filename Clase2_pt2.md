@@ -80,14 +80,7 @@ plot2 <- ggplot(data.summary, aes(x=categorias, y=mean, group=categorias, color=
   theme(axis.text = element_text(size=11, color="black"),
         axis.title = element_text(size=13),
         plot.title = element_text(size=15, face="bold", hjust=0.5),
-        legend.position = "none")+
-  geom_line(data=tibble(x=c(1, 2), y=c(66.5, 66.5)),
-                  aes(x=x, y=y),
-                  inherit.aes=FALSE)+
-  geom_text(data=tibble(x=1.5, y=66.7),
-            aes(x=x, y=y, label="P < 2.2 e-16"), size=4,
-            inherit.aes=FALSE)
-plot2
+        legend.position = "none")
 ```
 
 Probemos otra opción
@@ -103,14 +96,7 @@ plot3 <- rinitis %>%
   theme_classic()+
   theme(axis.text = element_text(size=10, color="black"),
         axis.title = element_text(size=13),
-        plot.title = element_text(size=15, face="bold", hjust=0.5))+
-  geom_line(data=tibble(x=c(1, 2), y=c(66.5, 66.5)),
-                  aes(x=x, y=y),
-                  inherit.aes=FALSE)+
-  geom_text(data=tibble(x=1.5, y=66.7),
-            aes(x=x, y=y, label="P < 2.2 e-16"), size=4,
-            inherit.aes=FALSE)
-plot3
+        plot.title = element_text(size=15, face="bold", hjust=0.5))
 ```
 
 Ahora grafiquemos todo junto para generar una figura lista para nuestro manuscrito, tesis, presentación o póster.
@@ -155,8 +141,6 @@ library(dplyr)
 tabla2 <- group_by(data1, tiempo.factor) %>%
   summarise(muestras=n(),
             media=mean(C1, na.rm=T),
-            mediana=median(C1, na.rm=T),
-            varianza=var(C1, na.rm=T),
             DE=sd(C1, na.rm=T),
             EE=DE/sqrt(muestras))
 tabla2
@@ -181,23 +165,8 @@ ggqqplot(log10(data1$C1))
 
 Pruebas de homocedasticidad
 ```
-## Prueba de Barlett
-bartlett.test(C1 ~ tiempo.factor, data=data1)
-## Prueba de Levene
-library(car)
-leveneTest(C1 ~ tiempo.factor, data=data1)
 ## Prueba de Filgner-Killen
 fligner.test(C1 ~ tiempo.factor, data=data1)
-```
-
-Todas las pruebas indican que las varianzas no son homogéneas entre ambos grupos, así que usaremos una transformación.
-```
-## Prueba de Barlett
-bartlett.test(log10(C1) ~ tiempo.factor, data=data1)
-## Prueba de Levene
-library(car)
-leveneTest(log10(C1) ~ tiempo.factor, data=data1)
-## Prueba de Filgner-Killen
 fligner.test(log10(C1) ~ tiempo.factor, data=data1)
 ```
 
@@ -214,8 +183,7 @@ head(data1.nuevo)
 
 # El paquete rstatix tiene la ventaja de que entrega información del análisis de manera tabulada que después podemos usar.
 test4 <- data1.nuevo %>%
-  t_test(log10.TAC ~ tiempo, paired=TRUE) %>%
-  add_significance()
+  t_test(log10.TAC ~ tiempo, paired=TRUE) %>% add_significance()
 test4
 ```
 
