@@ -1,5 +1,25 @@
 ## Continuación clase 2
 
+Vovlvemos a generar los datos
+```
+# crear 2369 datos con media 64.9 y desviación estándar 0.3
+data1 <- rnorm(2369,64.9,0.3)
+# crear 671 datos con media 63.3 y desviación estándar 0.5
+data2 <- rnorm(671,63.3,0.5)
+# juntamos con los datos
+carbohidratos <- c(data1,data2)
+# creamos el factor NO para los 2369 datos 
+no <- factor(rep("no",2369))
+# creamos el factor SI para los 671 datos 
+si <- factor(rep("si",671))
+# juntamos los factores
+categorias <- c(no,si)
+# creamos un dataframe con la variable agrupadora y la variable respuesta
+rinitis <- data.frame(categorias,carbohidratos)
+# guardamos un aechivo con los datos
+write.table(rinitis, "rinitis.txt", sep="\t", row.names=F)
+```
+
 ## Análisis paramétrico muestras no pareadas
 
 **IMPORTANTE**: apesar de que los datos no cumplen los supuestos paramétricos, vamos a hacer una prueba de t-student no pareada para efectos didácticos.
