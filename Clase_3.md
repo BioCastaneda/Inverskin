@@ -20,26 +20,21 @@ Este set datos corresponde a un set de datos revisado en clases, en el cual se m
 ```
 # Cargar la librería readxl que nos permitirá leer archivos Excel
 library(readxl)
-
-data1 <- read_xlsx("Antibioticos.xlsx")
-head(data1)
-str(data1)
+AB <- read_xlsx("Antibioticos.xlsx")
+head(AB)
+str(AB)
 
 # Indicamos que la columna llama "Antibiotico" contiene los distinos niveles del factor Antibiótico
 #
-data1$Antibiotico <- as.factor(data1$Antibiotico)
-str(data1)
+AB$Antibiotico <- as.factor(AB$Antibiotico)
+str(AB)
 ```
 
-Usando la librería [dplyr](https://dplyr.tidyverse.org/) podemos generar rápidamente tablas de resumen con distintos estadígrafos según lo indiquemos
+Calcularemos la estadística descriptiva
 
 ```
 library(dplyr)
-#
-## Creamos una tabla que nos entregue el tamaño muestreal, la media, la desviación estándar (DE),
-## y el error estándar (EE) para cada uno de los antibióticos en estudio
-#
-tabla1 <- group_by(data1, Antibiotico) %>%
+tabla1 <- group_by(AB, Antibiotico) %>%
   summarise(muestras=n(),
             media=mean(Tiempo.h, na.rm=T),
             DE=sd(Tiempo.h, na.rm=T),
@@ -47,46 +42,45 @@ tabla1 <- group_by(data1, Antibiotico) %>%
 tabla1
 ```
 
-
 ### Supuestos del análisis de una vía
 
 **1. Normalidad**
-
-Ponemos a prueba la normalidad de los datos con la prueba de Shapiro-Wilks. Además observamos la normalidad de los datos con un histograma y un qqplot.
 ```
-ggqqplot(data1$Tiempo.h, col="blue")
-shapiro.test(data1$Tiempo.h)
+ggqqplot(AB$Tiempo.h, col="blue")
+shapiro.test(AB$Tiempo.h)
 ```
 
-Observamos que la distribución de la variable respuesta está sesgada hacia la izquierda. Esto es ratificado por el resultado de la prueba de Shapiro-Wilks, la cual rechaza la hipótesis nula de normalidad. Sin embargo, los datos observados se distribuyen según lo esperado.
-
+El qqplot muestra que la mayoría de los datos cae dentro de lo esperado para una distribución, aunque la prueba de 
+Shapiro-Wilk indica que los datos no se distribuyen normalmente.
 Probemos ahora transformando los datos a logaritmo de 10 (log10).
 ```
-ggqqplot(log10(data1$Tiempo.h), col="blue")
-shapiro.test(log10(data1$Tiempo.h))
-
+ggqqplot(log10(AB$Tiempo.h), col="blue")
+shapiro.test(AB(data1$Tiempo.h))
 ```
+Los datos transformados se ajustan a una distribución normal.
+
+
 **2. Homocedasticidad**
+```
+fligner.test(Tiempo.h ~ Antibiotico, data=AB)
+fligner.test(log10(Tiempo.h) ~ Antibiotico, data=AB)
+```
 
-```
-fligner.test(Tiempo.h ~ Antibiotico, data=data1)
-fligner.test(log10(Tiempo.h) ~ Antibiotico, data=data1)
-```
+Los datos transformados cumplen con los supuestos de las pruebas paramétricas.
 
 **3. Análisis de una vía (ANOVA)**
 
-Dado que nuestros datos cumplen con los supuestos de normalidad y homocedasticidad, podemos realizar un análisis de una vía. Para estos hay dos formas: utilizando el comando aov o el comando lm. Ambas opciones entregan el mismo resultado.
 ```
 ## Comando aov
-test1 <- aov(log10(Tiempo.h) ~ Antibiotico, data=data1)
+test1 <- aov(log10(Tiempo.h) ~ Antibiotico, data=AB)
 anova(test1)
 
 ## Comando lm
-test2 <- lm(log10(Tiempo.h) ~ Antibiotico, data=data1)
+test2 <- lm(log10(Tiempo.h) ~ Antibiotico, data=AB)
 anova(test2)
-summary(test2)
 
 ## Graficar los residuales del modelo también nos permite saber si se cumple con el supusto de normalidad
+ggqqplot(test1$residuals, col="red")
 ggqqplot(test2$residuals, col="red")
 ```
 
@@ -100,37 +94,18 @@ library(rstatix)
 test1 %>% tukey_hsd() # Prueba de Tukey para los datos transformados
 #
 ## Crearemos una nueva variable llamada "log10.tiempo"
-data1$log10.tiempo <- log10(data1$Tiempo.h) 
-data1 %>% t_test(log10.tiempo ~ Antibiotico) %>% adjust_pvalue(method="bonferroni")
+AB$log10.tiempo <- log10(AB$Tiempo.h) 
+AB %>% t_test(log10.tiempo ~ Antibiotico) %>% adjust_pvalue(method="bonferroni")
 ```
 
 **5. Grafiquemos!!**
 
-A. Gráfico de caja-bigote (boxplot)
 ```
-plot7<- ggboxplot(data1, x="Antibiotico", y="Tiempo.h", fill="Antibiotico", 
-                  xlab="Antibióticos", ylab="Tiempo respuesta (h)",
-                  legend="none")
-plot7
-```
-
-B. Gráfico de violín
-```
-plot8<- ggviolin(data1, x="Antibiotico", y="Tiempo.h", fill="Antibiotico", 
-                  add="jitter",
-                  xlab="Antibióticos", ylab="Tiempo respuesta (h)",
-                  legend="none")+
-  stat_summary(fun=mean, show.legend=F, geom="crossbar", position=position_dodge(width=0.5), width=0.5) 
-plot8
-```
-
-C. Gráfico de disperción unidimensional (stripchart)
-```
-plot9 <- data1 %>%
+plot9 <- AB %>%
   ggplot(aes(y=Tiempo.h, x=Antibiotico, fill=Antibiotico)) +
   geom_jitter(show.legend=F, shape=21, color="black", size=4, 
               position=position_jitterdodge(jitter.width=0.3, dodge.width=0.8)) +
-  stat_summary(fun=mean, show.legend=F, geom="crossbar", position=position_dodge(width=0.8), width=0.55) + 
+  stat_summary(fun=mean, show.legend=F, geom="crossbar", position=position_dodge(width=0.8), width=0.3) + 
   labs(x="Antibióticos", y="Tiempo de respuesta (h)")+
   theme_classic()+
   theme(axis.text = element_text(size=10, color="black"),
@@ -138,39 +113,35 @@ plot9 <- data1 %>%
 plot9
 ```
 
-Miremos ahora todos juntos
+Agreguemos los valores de probabilidad y significancia a este gráfico
 ```
-ggarrange(plot7, plot8, plot9, labels=c("A","B","C"), ncol=3, nrow=1)
-```
-
-De los tres gráficos, el gráfico de violín es el más informativo porque muestra las medias, el rango de datos, la disperción univariada de estos, y su distribución.
-
-Ahora agreguemos los resultados de las comparaciones múltiples en el gráfico de violín
-```
-tukey.test1 <- data1 %>% tukey_hsd(log10.tiempo ~Antibiotico)
-tukey.test1
+# Primero fijamos los valores del eje y donde queremos que vayan las comparaciones (ver tukey.aov)
+stat.test <- tukey.aov %>% mutate(y.position = c(100,110,90))
 #
-## Opción con símbolos
-plot8 + stat_pvalue_manual(tukey.test1,label="p.adj.signif",tip.length = 0.02, y.position=c(130,140,120))
+# Gráfico con los valores de probabilidad
+plot9.1 <- plot9 + stat_pvalue_manual(stat.test, label = "P < {p.adj}", tip.length = 0.01,
+                           inherit.aes=FALSE)
 #
-## Opción con los valores exactos
-plot8 + stat_pvalue_manual(tukey.test1,label="p.adj",tip.length = 0.02, y.position=c(130,140,120))
+# Gráfico con los signos de significancia
+plot9.2 <- plot9 + stat_pvalue_manual(stat.test, label = "{p.adj.signif}", tip.length = 0.01,
+                                      inherit.aes=FALSE)
 #
-#
-tabla1
-plot8 + stat_pvalue_manual(tukey.test1,label="p.adj",tip.length = 0.02, y.position=c(130,140,120))+
+# Colomanos ambos gráficos en una misma figura y guardamos en formato PDF:
+ggarrange(plot9.1, plot9.2, labels=c("A","B"), ncol=2, nrow=1)
+ggsave("Figure_2.pdf", width=10, height = 4)
 ```
 
 **6. Análisis de poder**
 ```
-## Miremos la tabla de ANOVA
+## Miremos la tabla de ANOVA para ver las medias cuadradas entre y dentro de grupos
 anova(test1)
 #
-## Calcular el poder estadístico del diseño (probabilidad de aceptar H1 cuando es veradadera)
-power.anova.test(groups=3,  n=9, between.var= 1204, within.var=268, sig.level=0.05)
+## Calcular el poder estadístico del diseño (probabilidad de aceptar H0 cuando es veradadera)
+power.anova.test(groups=3, n=10, between.var= 0.11, within.var=0.019, sig.level=0.05)
 #
-## Calcular el número mñinimo de replicar para lograr un poder de 1
-power.anova.test(groups=3, power=0.999, between.var=1204, within.var=268.4, sig.level=0.05)
+## Calcular el número mínimo de replicar para lograr un poder del 95%
+power.anova.test(groups=3, power=0.95, between.var=0.11, within.var=0.019, sig.level=0.05)
+
 ```
 
 ---
