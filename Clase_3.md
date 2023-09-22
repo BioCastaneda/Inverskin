@@ -18,6 +18,9 @@ Descargar los datos contenidos en el archivo Excel [Antibióticos](https://githu
 Este set datos corresponde a un set de datos revisado en clases, en el cual se mide el tiempo (en horas) que tarda en desaparecer un infección después de la administración de tres antibióticos. ¿Hay diferencias en el tiempo de respuesta entre los distintos antibióticos?
 
 ```
+rm(list=ls()) # limpia el ambiente
+graphics.off() # Limpiar la lista de gráficos
+
 # Cargar la librería readxl que nos permitirá leer archivos Excel
 library(readxl)
 AB <- read_xlsx("Antibioticos.xlsx")
