@@ -2,6 +2,9 @@
 
 Vovlvemos a generar los datos
 ```
+rm(list=ls()) # limpia el ambiente
+graphics.off() # Limpiar la lista de gráficos
+
 # crear 2369 datos con media 64.9 y desviación estándar 0.3
 data1 <- rnorm(2369,64.9,0.3)
 # crear 671 datos con media 63.3 y desviación estándar 0.5
