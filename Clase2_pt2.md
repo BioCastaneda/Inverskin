@@ -133,9 +133,11 @@ library(readxl)
 data3 <- read_xlsx("tacrolimus.xlsx")  
 head(data3)
 
-str(data1)
-data1$tiempo.factor <- as.factor(data1$tiempo)
-str(data1)
+
+library(tidyverse)
+data1.nuevo <- data1 %>%
+  gather(key = "tiempo", value = "TAC", C1, C12)
+head(data1.nuevo)
 ```
 
 Estadísticas básicas
