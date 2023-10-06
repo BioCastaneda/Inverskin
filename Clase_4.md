@@ -6,7 +6,7 @@ En este práctico utilizaremos los modelos lineales mixtos para analizar dos tip
 
 ## Contenido
 
-1. [Diseño de medidas repetidas]()
+1. [Diseño de medidas repetidas](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_4.md#1-dise%C3%B1o-de-medidas-repetidas)
 2. [Diseño anidado]()
 
 ---
@@ -74,12 +74,13 @@ tabla1
 
 Usamos la tabla 1 para generar un gráfico con las tendencias temporales para cada dieta
 ```
+library(ggpubr)
 plot1 <- ggplot(tabla1, aes(x=Time, y=media, group=Diet, color=Diet)) + 
   geom_line(position=position_dodge(0.5)) +
   geom_point(position=position_dodge(0.5), size=2)+
   geom_errorbar(aes(ymin=media-DE, ymax=media+DE), width=.1,
                 position=position_dodge(0.5))+
-  labs(x="Días", y = "Peso (g)")+
+  labs(x="Semanas", y = "Peso (g)")+
   scale_color_discrete(name="Dieta")+
   theme_classic()+
   theme(axis.text = element_text(size=10, color="black"),
@@ -90,6 +91,55 @@ plot1
 plot1 + scale_color_discrete(name="Dieta",
                              breaks=c("1","2","3","4"),
                              labels=c("Tipo 1", "Tipo 2", "Tipo 3", "Tipo 4"))
+```
+
+También podemos observar la tendencia de peso para cada pollo
+```
+ggplot(data = ChickWeight, aes(x = Time, y = weight, colour = Diet)) +
+  geom_point() +
+  geom_line(aes(group = Chick))+
+  theme_classic()+
+  labs(x="Semanas", y = "Peso (g)")+
+  scale_color_discrete(name="Dieta",
+                       breaks=c("1","2","3","4"),
+                       labels=c("Tipo 1", "Tipo 2", "Tipo 3", "Tipo 4"))
+```
+
+Ahora solo vamos a analizar si existe efecto de la dieta sobre el peso a las 21 semanas. Para estos vamos a genera un subset de datos que solo tenga información de esa semana
+```
+d21 <- subset(ChickWeight, Time=="21")
+m2 <- lm(weight ~ Diet, data=d21)
+anova(m2)
+```
+
+Dado que hay diferencias significativas entre las dietas, realizaremos una comparación de Tukey
+```
+library(rstatix)
+tukey.aov <- m3 %>% tukey_hsd()
+```
+
+Graficamos
+```
+plot2 <- d21 %>%
+  ggplot(aes(y=weight, x=Diet, fill=Diet)) +
+  geom_jitter(show.legend=F, shape=21, color="black", size=4, 
+              position=position_jitterdodge(jitter.width=0.3, dodge.width=0.8)) +
+  stat_summary(fun=mean, show.legend=F, geom="crossbar", position=position_dodge(width=0.8), width=0.3) + 
+  labs(x="Dieta", y="Peso a los 21 días (g)")+
+  scale_x_discrete(breaks=c("1","2","3","4"),
+                   labels=c("Tipo 1", "Tipo 2", "Tipo 3", "Tipo 4"))+
+  theme_classic()+
+  theme(axis.text = element_text(size=10, color="black"),
+        axis.title = element_text(size=13))
+plot2
+```
+
+... y agregamos la información del análisis de Tukey
+```
+stat.test <- tukey.aov %>% mutate(y.position = c(375,440,455,395,420,405))
+
+plot2 + stat_pvalue_manual(stat.test, label = "{p.adj.signif}", tip.length = 0.01,
+                                      inherit.aes=FALSE)
 ```
 
 
