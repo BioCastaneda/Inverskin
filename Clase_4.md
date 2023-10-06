@@ -15,7 +15,7 @@ En este práctico utilizaremos los modelos lineales mixtos para analizar dos tip
 El diseño de medidas repetidas es aquel en el cual una misma unidad muestreal es medida múltiples veces, repetidas veces. Cuando una unidad muestreal es medida dos veces (e.g., antes y después), 
 nos enfrentamos un diseño pareado (ver Clase 2). Pero cuando tenemos más de dos mediciones temporales para una misma unidad muestreal, el diseño se denomina de medidas repetidas.
 
-El siguiente set da datos (Chickenwight) tiene pesos corporales medidos en 50 pollos durante sus primeras 21 semenas de vida (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 y 21 semanas).
+El siguiente set da datos [Chickenwight](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/chicken.txt) tiene pesos corporales medidos en 50 pollos durante sus primeras 21 semenas de vida (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 y 21 semanas).
 Estos pollos fueron asignados a 4 dietas distintas para evaluar su efecto sobre el peso corporal de los pollos.
 
 Lo primero que vamos a hacer es cargar el set de datos y revisar su estructura
