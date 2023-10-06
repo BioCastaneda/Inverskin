@@ -142,4 +142,15 @@ plot2 + stat_pvalue_manual(stat.test, label = "{p.adj.signif}", tip.length = 0.0
                                       inherit.aes=FALSE)
 ```
 
+---
+## 2. Diseño anidado
+
+Los diseños aninados diferen de los diseños ortogonales en que no todos los niveles de un factor están en perfecta combinación con los niveles del
+otro factor. Es decir, hay niveles del factor B que solo están presentes en combinación con algunos o uno de los niveles del factor A.
+
+En el siguiente set de datos, Tabletas, tenemos datos del grosor de unas patillas de distintos lotes, fabricados en distintas fábricas. En est caso, las tabletas del lote 1 solo se producen en la fábrica A, mientras que las pastillas del lote 4 solo se producen en la fábrica B. Con este set de datos probaremos si existen o no diferencias entre los productor producidos por cada una de las fábricas. Además, estimaremos la variabilidad entre lotes.
+
+!(https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tableta.png)
+
+
 
