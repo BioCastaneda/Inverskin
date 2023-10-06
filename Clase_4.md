@@ -115,7 +115,7 @@ anova(m2)
 Dado que hay diferencias significativas entre las dietas, realizaremos una comparación de Tukey
 ```
 library(rstatix)
-tukey.aov <- m3 %>% tukey_hsd()
+tukey.aov <- m2 %>% tukey_hsd()
 ```
 
 Graficamos
