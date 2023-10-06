@@ -152,5 +152,61 @@ En el siguiente set de datos, [Tabletas](https://github.com/BioCastaneda/Inversk
 
 ![Tabla](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tableta.png)
 
+Cargamos los datos y revisamos su estructura
+```
+library(readxl)
+data2 <- read_xlsx("tabletas.xlsx")
+str(data2)
 
+# Asignamos factores
+data2$Fabrica <- as.factor(data2$Fabrica)
+data2$Lote <- as.factor(data2$Lote)
+str(data2)
+```
+
+Probramos normalidad y homocedasticidad
+```
+shapiro.test(data2$Grosor)
+library(ggpubr)
+ggqqplot(data2$Grosor)
+
+leveneTest(Grosor ~ Fabrica, data=data2)
+leveneTest(Grosor ~ Lote, data=data2)
+```
+
+Ajustamos un modelo mixto, con `lote` anidado dentro de `fábrica`
+```
+m4 <- lmer(Grosor ~ Fabrica + (1|Lote:Fabrica), data=data2)
+anova(m4)
+```
+
+El anova solo nos da información acerca del factor fijo `fábrica`. Para poner a prueba el efecto aleatorio `lote:fábrica` debemos remover
+el factor aleatorio del modelo, y luego compararlo con el modelo completo.
+```
+m4.1 <- lm(Grosor ~ Fabrica, data=data2)
+anova(m4,m4.1)
+```
+
+Los lotes varían significativamente entre sí, y usando los componentes de varianza `lote:fábrica` y `residuales` podemos calcular
+la variabilidad total de los datos expplicada por los `lotes`
+```
+variabilidad <- 0.02028/(0.02028+0.01209)
+variabilidad
+```
+
+Graficamos
+```
+set.seed(0)
+plot3 <- data2 %>%
+  ggplot(aes(y=Grosor, x=Fabrica, fill=Lote)) +
+  geom_jitter(show.legend=TRUE, shape=21, color="black", size=3, 
+              position=position_jitterdodge(jitter.width=0.3, dodge.width=0.8)) +
+  stat_summary(fun=mean, show.legend=F, geom="crossbar", position=position_dodge(width=0.8), width=0.5) + 
+  labs(x="Fábrica", y="Grosor (um)")+
+  scale_fill_discrete(name="Lote")+
+  theme_classic()+
+  theme(axis.text = element_text(size=10, color="black"),
+        axis.title = element_text(size=13))
+plot3
+```
 
