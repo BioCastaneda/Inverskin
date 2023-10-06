@@ -150,7 +150,7 @@ otro factor. Es decir, hay niveles del factor B que solo están presentes en com
 
 En el siguiente set de datos, Tabletas, tenemos datos del grosor de unas patillas de distintos lotes, fabricados en distintas fábricas. En est caso, las tabletas del lote 1 solo se producen en la fábrica A, mientras que las pastillas del lote 4 solo se producen en la fábrica B. Con este set de datos probaremos si existen o no diferencias entre los productor producidos por cada una de las fábricas. Además, estimaremos la variabilidad entre lotes.
 
-!(https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tableta.png)
+![Tabla](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/tableta.png)
 
 
 
