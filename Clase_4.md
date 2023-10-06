@@ -59,3 +59,37 @@ library(car)
 Anova(m1, test="F")
 ```
 
+El análisis indica que la interacción dieta*tiempo es significativa, sugiriendo que el efecto de la dieta sobre el peso corporal es distinta entre ellas y que varía en función del tiempo
+
+Generar una tabla con la estadística básica
+```
+library(dplyr)
+tabla1 <- ChickWeight %>% group_by(Diet,Time) %>%
+  summarise(muestras=n(),
+            media=mean(weight, na.rm=T),
+            DE=sd(weight, na.rm=T),
+            EE=DE/sqrt(muestras))
+tabla1
+```
+
+Usamos la tabla 1 para generar un gráfico con las tendencias temporales para cada dieta
+```
+plot1 <- ggplot(tabla1, aes(x=Time, y=media, group=Diet, color=Diet)) + 
+  geom_line(position=position_dodge(0.5)) +
+  geom_point(position=position_dodge(0.5), size=2)+
+  geom_errorbar(aes(ymin=media-DE, ymax=media+DE), width=.1,
+                position=position_dodge(0.5))+
+  labs(x="Días", y = "Peso (g)")+
+  scale_color_discrete(name="Dieta")+
+  theme_classic()+
+  theme(axis.text = element_text(size=10, color="black"),
+        axis.title = element_text(size=13))
+plot1
+
+## Editamos un poco la leyenda
+plot1 + scale_color_discrete(name="Dieta",
+                             breaks=c("1","2","3","4"),
+                             labels=c("Tipo 1", "Tipo 2", "Tipo 3", "Tipo 4"))
+```
+
+
