@@ -7,7 +7,7 @@ En este práctico utilizaremos los modelos lineales mixtos para analizar dos tip
 ## Contenido
 
 1. [Diseño de medidas repetidas](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_4.md#1-dise%C3%B1o-de-medidas-repetidas)
-2. [Diseño anidado]()
+2. [Diseño anidado](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_4.md#2-dise%C3%B1o-anidado)
 
 ---
 ## 1. Diseño de medidas repetidas
