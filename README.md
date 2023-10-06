@@ -21,4 +21,5 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 ### Clase 3
 1. [Clase 3: comparación de múltiples grupos](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/Clase3.pdf)
 2. [Clase 3: R](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_3.md)
-
+### Clase 4
+1. [Clase 4: R](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_4.md)
