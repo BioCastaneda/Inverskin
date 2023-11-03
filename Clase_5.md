@@ -171,7 +171,7 @@ Podemos comparar estos modelos estos modelos basándonos en los valores ajustado
 summary(m4)$adj.r.squared
 summary(m5)$adj.r.squared
 summary(m7)$adj.r.squared
-summary(m7)$adj.r.squared
+summary(m6)$adj.r.squared
 summary(m8)$adj.r.squared
 ```
 
