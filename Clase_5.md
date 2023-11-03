@@ -26,7 +26,7 @@ str(tac)
 # Definir las categorias como factores
 tac$sex <- as.factor(tac$SEX)
 tac$phenotype <- as.factor(tac$phenotype)
-tac$brand <- as.factor(tac$phenotype)
+tac$brand <- as.factor(tac$brand)
 ```
 
 Ahora graficamos los histogramas de frecuencia para cada valor plasmático de tacrolimus: C0, C1, C2, C4, C12, C24.
