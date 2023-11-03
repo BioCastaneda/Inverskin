@@ -23,3 +23,5 @@ Además recomendamos la utilización de [RStudio](https://www.rstudio.com/produc
 2. [Clase 3: R](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_3.md)
 ### Clase 4
 1. [Clase 4: R](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_4.md)
+### Clase 5
+1. [Clase 5: R](https://github.com/BioCastaneda/Inverskin/blob/main/Clase_5.md)
