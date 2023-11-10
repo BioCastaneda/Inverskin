@@ -200,7 +200,7 @@ Este set de datos pertence al Instituto Nacional de Diabetes y Enfermedades Dige
 
 Nuevamente, lo primero es cargar el set de datos y revisar su estructura.
 ```
-pima <- read.csv("diabetes.csv")
+pima <- read.read("diabetes.txt")
 head(pima)
 ```
 
