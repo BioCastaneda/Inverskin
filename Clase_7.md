@@ -17,62 +17,46 @@ Este set de datos contiene las abundancias (realtivas y absolutas) de bacterias 
 
 1. Analizamos las correlaciones entre variables
 ```
-library(ggpubr)
 library(rstatix)
+library(readxl)
+library(factoextra)
+library(FactoMineR)
 
-
-data1 <- read.table("DSdata_phylum.txt", header=T)
+data1 <- read_xlsx("DSdata_phylum.xlsx")
 head(data1)
 dim(data1)
+str(data1)
 #
 ## Seleccionamos las columnas con las abundancias absolutas
-data2 <- data1[,c(11:15)]
-data2 %>% cor_mat() %>% cor_mark_significant()
+data2 <- data1[,c(9:13)]
+cor.mat <- data2 %>% cor_mat()
+cor.mat %>% pull_lower_triangle() %>% cor_plot()
 ```
 
 2. Realizamos el PCA
 ```
-pca <- prcomp(data2, sacale=F)  # scale=F porque las variables están en las unidades
-summary(pca)
-plot(pca)   # Grafica la varianza explicada por cada PCs
-biplot(pca) # Gráfico básico de los vectores asociados las variables respuesta y la ubicación espacial de las muestras
+# Calculamos los componentes principales
+ds.pca <- PCA(data2, graph=F)
+
+# Visualizamos la varianza explicada por cada PC
+fviz_eig(ds.pca, addlabels = TRUE, ylim = c(0, 80))
 ```
 
-3. Obtenemos las coordenadas de cada muestra en términos de los componentes principales (PCs)
+3. Graficar
 ```
-names(pca)
-pca$sdev # sd (varianza) explicada por cada PC
-pca$rotation  # contribución de cada variable a cada PC
-pca$center   # valor usado para centrar (media)
-pca$scale  # valor usado para escalar (sd)
-pca$x   # coordenadas para cada muestra
-#
-## Crear dos variables (PC1 y PC2) para graficar las muestras en el gráfico del PCA
-PC1 <- pca$x[,1]
-PC2 <- pca$x[,2]
-```
+plot.pca <- fviz_pca_biplot(ds.pca, 
+                # Individuals
+                geom.ind = "point",
+                fill.ind = data1$Stress, col.ind = "black",
+                pointshape = 21, pointsize = 2,
+                palette = c("red","blue"),
+                addEllipses = TRUE,
+                # Variables
+                alpha.var=1, col.var = "black",
+                gradient.cols = "black",
+                legend.title = list(fill = "Stress"))
 
-4. Graficar
-```
-## Opción 1
-biplot(pca,col="purple",las=1,cex=1)
-#
-## Opción 2
-biplot(pca,col=c("white","purple"),xlim=c(-0.5,0.5),ylim=c(-0.5,0.5),las=1,cex=1)
-#
-## Opción 3
-otu$Sex
-col <- c(rep("red",18),rep("blue",20))
-biplot(pca,col=c("white","purple"),xlim=c(-0.5,0.5),ylim=c(-0.5,0.5),las=1,cex=1)
-par(new=T)
-plot(PC1,PC2,pch=21,bg=col,cex=1.5,bty="o")   # Valores de los ejes duplicados
-#
-## Opción 4
-range(PC1)
-range(PC2)
-biplot(pca, col=c("white","purple"), cex=1,xlim=c(-0.4,0.4))
-par(new=T)
-plot(PC1, PC2, pch=21, bg=col, cex=1.5, bty="o", las=1, xlim=c(-26000,20000), ylim=c(-15000,21000),xaxt="n",yaxt="n")
+plot.pca
 ```
 
 ---
@@ -89,7 +73,7 @@ library(ggplot2)
 library(ggpubr)
 library(MASS)
 
-otu <- read.table("otu_table.txt", header=T)
+otu <- read_xls("otu_table.xlsx")
 head(otu)
 #
 ## Removemos las columnas categóricas
