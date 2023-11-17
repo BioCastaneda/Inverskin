@@ -118,11 +118,13 @@ Este set de datos contiene las abundancias absolutas de bacterias asociadas al i
 1. Cargamos y realizamos el análisis
 ```
 library(ape)
-otu <- read.table("otu_table.txt", header=T)
+otu <- read_xlsx("otu_table.xlsx")
 head(otu)
+otu2 <- otu[order(otu$Stress),]
+head(otu2)
 #
 ## Removemos las columnas categóricas
-mat.otu <- otu[,-c(1:3),]
+mat.otu <- otu2[,-c(1:3),]
 #
 ## Calculamos las distancias entre muestras...
 distancia <- dist(mat.otu, method="euclidean")
@@ -132,14 +134,11 @@ clust <- hclust(distancia, method="average")
 
 2. Graficamos
 ```
-# Opción 1
-plot(clust, hang=-1)
+## Opción 1
+plot(as.phylo(clust),type="phylogram",cex=0.8,tip.col=c(rep("red",18),rep("blue",18)),font=2,main="Similitud entre muestras")
+legend(800,30,pt.bg=c("red","blue"),c("Heat-stressed","Non-stressed"),pch=21,bty="n")
 #
 ## Opción 2
-plot(as.phylo(clust),type="phylogram",cex=0.8,tip.col=c(rep(c("blue","red"),18)),font=2,main="Similitud entre muestras")
-legend(1000,30,pt.bg=c("blue","red"),c("Machos","Hembras"),pch=21,bty="n")
-#
-## Opción 3
 t1 <- scale(mat.otu)
 heatmap(t1, xlab="OTUs", ylab="Muestras", RowSideColors=rep(c("blue","red"),18))
 ```
