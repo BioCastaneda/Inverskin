@@ -1,4 +1,4 @@
-# Práctico 7: Análisis multivariado (parte II)
+# Práctico 7: Análisis multivariado
 
 En este práctico veremos:
 
