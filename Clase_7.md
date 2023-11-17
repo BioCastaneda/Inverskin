@@ -73,7 +73,7 @@ library(ggplot2)
 library(ggpubr)
 library(MASS)
 
-otu <- read_xls("otu_table.xlsx")
+otu <- read_xlsx("otu_table.xlsx")
 head(otu)
 #
 ## Removemos las columnas categóricas
