@@ -11,7 +11,7 @@ En este práctico veremos:
 ---
 ## 1. Análisis de componentes principales (PCA)
 
-Descargar los datos contenidos en el archivo de texto [Phylum](https://github.com/lecastaneda/Bioestadistica/blob/main/DSdata_phylum.txt)
+Descargar los datos contenidos en el archivo de texto [Phylum](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/DSdata_phylum.xlsx)
 
 Este set de datos contiene las abundancias (realtivas y absolutas) de bacterias asociadas al intestito de <i>Drosophila subobscura</i> a nivel taxonómico de phylum.
 
@@ -81,7 +81,7 @@ plot(PC1, PC2, pch=21, bg=col, cex=1.5, bty="o", las=1, xlim=c(-26000,20000), yl
 ---
 ## 2. Escalamiento multidimensional (MDS)
 
-Descargar los datos contenidos en el archivo de texto [Otus](https://github.com/lecastaneda/Bioestadistica/blob/main/otu_table.txt)
+Descargar los datos contenidos en el archivo de texto [Otus](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/otu_table.xlsx)
 
 Este set de datos contiene las abundancias absolutas de bacterias asociadas al intestito de <i>Drosophila subobscura</i> a nivel de OTU.
 
@@ -130,7 +130,7 @@ adonis2(distancia ~ otu$Sex*otu$Stress)
 ---
 ## 3. Análisis de conglomerados (Clusters)
 
-Descargar los datos contenidos en el archivo de texto [Otus](https://github.com/lecastaneda/Bioestadistica/blob/main/otu_table.txt)
+Descargar los datos contenidos en el archivo de texto [Otus](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/otu_table.xlsx)
 
 Este set de datos contiene las abundancias absolutas de bacterias asociadas al intestito de <i>Drosophila subobscura</i> a nivel de OTU.
 
