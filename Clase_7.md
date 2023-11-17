@@ -27,10 +27,7 @@ dim(data1)
 #
 ## Seleccionamos las columnas con las abundancias absolutas
 data2 <- data1[,c(11:15)]
-cor.mat <- data2 %>% cor_mat()
-cor.mat
-cor.mat %>% cor_get_pval()
-cor.mat %>% cor_mark_significant()
+data2 %>% cor_mat() %>% cor_mark_significant()
 ```
 
 2. Realizamos el PCA
