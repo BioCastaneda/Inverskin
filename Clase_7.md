@@ -13,7 +13,7 @@ En este práctico veremos:
 
 Descargar los datos contenidos en el archivo de texto [Phylum](https://github.com/BioCastaneda/Inverskin/blob/main/archivos/DSdata_phylum.xlsx)
 
-Este set de datos contiene las abundancias (realtivas y absolutas) de bacterias asociadas al intestito de <i>Drosophila subobscura</i> a nivel taxonómico de phylum.
+Este set de datos contiene las abundancias (relativas y absolutas) de bacterias asociadas al intestito de <i>Drosophila subobscura</i> a nivel taxonómico de phylum.
 
 1. Analizamos las correlaciones entre variables
 ```
